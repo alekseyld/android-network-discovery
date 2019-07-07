@@ -196,15 +196,15 @@ public class Prefs extends PreferenceActivity implements OnSharedPreferenceChang
                 });
 
         // Donate click listener
-        ((Preference) ps.findPreference(KEY_DONATE))
-                .setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    public boolean onPreferenceClick(Preference preference) {
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(URL_DONATE));
-                        startActivity(i);
-                        return true;
-                    }
-                });
+//        ((Preference) ps.findPreference(KEY_DONATE))
+//                .setOnPreferenceClickListener(new OnPreferenceClickListener() {
+//                    public boolean onPreferenceClick(Preference preference) {
+//                        Intent i = new Intent(Intent.ACTION_VIEW);
+//                        i.setData(Uri.parse(URL_DONATE));
+//                        startActivity(i);
+//                        return true;
+//                    }
+//                });
 
         // Website
         Preference website = (Preference) ps.findPreference(KEY_WEBSITE);
