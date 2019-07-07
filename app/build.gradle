@@ -1,0 +1,22 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "info.lamatricexiste.network"
+        //<!-- FIXME: Isn't the app compatible with API Level 1 ? -->
+        minSdkVersion 3
+        targetSdkVersion 28
+        versionCode 45
+        versionName "0.3.5.1"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
