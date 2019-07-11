@@ -5,20 +5,6 @@
 
 package info.lamatricexiste.network;
 
-import info.lamatricexiste.network.Network.HostBean;
-import info.lamatricexiste.network.Network.NetInfo;
-import info.lamatricexiste.network.Utils.Db;
-import info.lamatricexiste.network.Utils.Help;
-import info.lamatricexiste.network.Utils.Prefs;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.TabActivity;
@@ -34,14 +20,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -49,6 +36,20 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import info.lamatricexiste.network.Network.HostBean;
+import info.lamatricexiste.network.Network.NetInfo;
+import info.lamatricexiste.network.Utils.Db;
+import info.lamatricexiste.network.Utils.Help;
+import info.lamatricexiste.network.Utils.Prefs;
 
 final public class ActivityPortscan extends TabActivity {
 
@@ -197,6 +198,22 @@ final public class ActivityPortscan extends TabActivity {
         if (host.portsOpen == null && host.portsClosed == null) {
             startScan();
         }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        Toolbar bar = findViewById(R.id.toolbar);
+        bar.setTitle(R.string.scan_single_title);
+
+        bar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_action_back));
+        bar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override

@@ -9,8 +9,11 @@
     android:layout_height="fill_parent">
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/toolbar"/>
+
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="?android:attr/listPreferredItemHeight"
@@ -100,6 +103,7 @@
                 android:drawableLeft="@drawable/back"
                 android:drawablePadding="15dip"
                 android:text="@string/btn_back"
+                android:visibility="gone"
                 style="@style/ButtonTop" />
         </RelativeLayout>
     </LinearLayout>
