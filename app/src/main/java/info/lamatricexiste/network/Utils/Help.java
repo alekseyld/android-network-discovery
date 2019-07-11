@@ -5,14 +5,30 @@
 
 package info.lamatricexiste.network.Utils;
 
-import info.lamatricexiste.network.R;
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
-public class Help extends Activity {
+import info.lamatricexiste.network.R;
+
+public class Help extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.help);
+
+        Toolbar bar = findViewById(R.id.toolbar);
+        bar.setTitle(R.string.preferences_help);
+
+        setSupportActionBar(bar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

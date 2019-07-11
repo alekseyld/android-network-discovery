@@ -16,9 +16,10 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.content.SharedPreferences;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-public abstract class ActivityNet extends Activity {
+public abstract class ActivityNet extends AppCompatActivity {
 
     private final String TAG = "NetState";
     private ConnectivityManager connMgr;

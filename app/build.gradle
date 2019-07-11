@@ -4,11 +4,10 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "info.lamatricexiste.network"
-        //<!-- FIXME: Isn't the app compatible with API Level 1 ? -->
-        minSdkVersion 3
+        minSdkVersion 14
         targetSdkVersion 28
-        versionCode 45
-        versionName "0.3.5.1"
+        versionCode 46
+        versionName "0.4.0."
     }
     buildTypes {
         release {
@@ -19,4 +18,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+
 }

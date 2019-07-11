@@ -5,17 +5,6 @@
 
 package info.lamatricexiste.network.Utils;
 
-import info.lamatricexiste.network.ActivityMain;
-import info.lamatricexiste.network.R;
-import info.lamatricexiste.network.Network.NetInfo;
-
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -29,14 +18,29 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.provider.Settings;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import info.lamatricexiste.network.ActivityMain;
+import info.lamatricexiste.network.Network.NetInfo;
+import info.lamatricexiste.network.R;
 
 public class Prefs extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
@@ -243,6 +247,24 @@ public class Prefs extends PreferenceActivity implements OnSharedPreferenceChang
             version.setSummary("0.3.x");
         }
 
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
+        Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar, root, false);
+        bar.setTitle(R.string.btn_options);
+        root.addView(bar, 0); // insert at top
+
+        bar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_action_back));
+        bar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {

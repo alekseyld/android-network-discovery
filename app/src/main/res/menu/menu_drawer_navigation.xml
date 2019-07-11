@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:icon="@drawable/ic_settings"
+            android:id="@+id/action_options"
+            android:title="@string/btn_options"/>
+        <item
+            android:icon="@drawable/ic_about"
+            android:id="@+id/action_help"
+            android:title="@string/preferences_help"/>
+    </group>
+</menu>

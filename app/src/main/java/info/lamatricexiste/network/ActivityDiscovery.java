@@ -5,27 +5,20 @@
 
 package info.lamatricexiste.network;
 
-import info.lamatricexiste.network.Network.HardwareAddress;
-import info.lamatricexiste.network.Network.HostBean;
-import info.lamatricexiste.network.Network.NetInfo;
-import info.lamatricexiste.network.Utils.Export;
-import info.lamatricexiste.network.Utils.Help;
-import info.lamatricexiste.network.Utils.Prefs;
-import info.lamatricexiste.network.Utils.Save;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,7 +34,18 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+
+import info.lamatricexiste.network.Network.HostBean;
+import info.lamatricexiste.network.Network.NetInfo;
+import info.lamatricexiste.network.Utils.Export;
+import info.lamatricexiste.network.Utils.Help;
+import info.lamatricexiste.network.Utils.Prefs;
+import info.lamatricexiste.network.Utils.Save;
 
 final public class ActivityDiscovery extends ActivityNet implements OnItemClickListener {
 
@@ -63,12 +68,23 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
 
     // private SlidingDrawer mDrawer;
 
+    private Toolbar toolbar;
+
+    // Navigation Drawer fields
+    private ActionBarDrawerToggle drawerToggle;
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_PROGRESS);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.discovery);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         mInflater = LayoutInflater.from(ctxt);
 
         // Discover
@@ -114,6 +130,41 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
          * ((Button) findViewById(R.id.btn_cidr_minus)).setOnClickListener(new
          * View.OnClickListener() { public void onClick(View v) { } });
          */
+
+        onCreateDrawer();
+    }
+
+    private void  onCreateDrawer() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
+        drawerLayout.addDrawerListener(drawerToggle);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
+                    case R.id.action_options:
+                        startActivity(new Intent(ctxt, Prefs.class));
+                        toogleDrawer();
+                        return true;
+
+                    case R.id.action_help:
+                        startActivity(new Intent(ctxt, Help.class));
+                        toogleDrawer();
+                        return true;
+                }
+
+                return false;
+            }
+        });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        drawerToggle.syncState();
     }
 
     @Override
@@ -137,6 +188,9 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                toogleDrawer();
+                return true;
             case ActivityDiscovery.MENU_SCAN_SINGLE:
                 scanSingle(this, null);
                 return true;
@@ -151,6 +205,16 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
                 return true;
         }
         return false;
+    }
+
+    private void toogleDrawer() {
+        boolean isOpen = drawerLayout.isDrawerOpen(Gravity.START);
+
+        if (isOpen) {
+            drawerLayout.closeDrawer(Gravity.START);
+        } else {
+            drawerLayout.openDrawer(Gravity.START);
+        }
     }
 
     protected void setInfo() {

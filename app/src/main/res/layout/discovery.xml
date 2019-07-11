@@ -1,50 +1,69 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  Copyright (C) 2009-2010 Aubort Jean-Baptiste (Rorist)
  Licensed under GNU's GPL 2, see README
  
  FIXME: Use RelativeLayout !!!
 -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dip">
-        <Button
-            android:id="@+id/btn_discover"
-            android:drawableLeft="@drawable/discover"
-            android:text="@string/btn_discover"
-            style="@style/ButtonTop" />
-        <Button
-            android:id="@+id/btn_options"
-            android:drawableLeft="@drawable/settings"
-            android:text="@string/btn_options"
-            style="@style/ButtonTop" />
-    </LinearLayout>
-    <FrameLayout
-        android:layout_width="fill_parent" 
-        android:layout_height="0dip"
-        android:layout_weight="1" >
-        <ListView
-            android:id="@+id/output"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:dividerHeight="0dip"
-            android:cacheColorHint="#00000000" />
-        <TextView
-            android:id="@+id/list_empty"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:gravity="center_vertical"
-            android:layout_gravity="center_horizontal"
-            android:textSize="10dip"
-            android:typeface="monospace"
-            android:text="@string/discover_empty" /> <!--
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <!-- The main content view -->
+        <FrameLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gray_background">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_discover"
+                        style="@style/ButtonTop"
+                        android:drawableLeft="@drawable/discover"
+                        android:text="@string/btn_discover" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dip"
+                    android:layout_weight="1">
+
+                    <ListView
+                        android:id="@+id/output"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:cacheColorHint="#00000000"
+                        android:dividerHeight="0dip" />
+
+                    <TextView
+                        android:id="@+id/list_empty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_vertical"
+                        android:text="@string/discover_empty"
+                        android:textSize="10dip"
+                        android:typeface="monospace" /> <!--
         <SlidingDrawer
             android:id="@+id/drawer"
             android:layout_width="wrap_content"
@@ -90,35 +109,56 @@
             </LinearLayout>
          </SlidingDrawer>
           -->
-    </FrameLayout>
-    <LinearLayout
-        android:id="@+id/info_container"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dip"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:paddingBottom="5dip"
-        android:background="@drawable/drawer_bg"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/info_ip"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textSize="10dip"
-            android:typeface="monospace" />
-        <TextView
-            android:id="@+id/info_in"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textSize="10dip"
-            android:typeface="monospace"
-            android:text="@string/wifi_unknown" />
-        <TextView
-            android:id="@+id/info_mo"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textSize="10dip"
-            android:typeface="monospace" />
-    </LinearLayout>
+                </FrameLayout>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/info_container"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dip"
+                        android:paddingTop="10dip"
+                        android:paddingRight="10dip"
+                        android:paddingBottom="5dip">
+
+                        <TextView
+                            android:id="@+id/info_ip"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:typeface="monospace" />
+
+                        <TextView
+                            android:id="@+id/info_in"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/wifi_unknown"
+                            android:textSize="12sp"
+                            android:typeface="monospace" />
+
+                        <TextView
+                            android:id="@+id/info_mo"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:typeface="monospace" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- The navigation drawer -->
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:menu="@menu/menu_drawer_navigation" />
+
+    </android.support.v4.widget.DrawerLayout>
 </LinearLayout>
