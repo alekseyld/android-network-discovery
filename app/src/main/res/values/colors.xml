@@ -12,4 +12,6 @@
     <color name="colorPrimaryDark">#26418f</color>
     <color name="colorAccent">#512da8</color>
     <color name="gray_background">#f5f5f5</color>
+    <color name="fab_color">#6B6680</color>
+    <color name="black_semi_transparent">#B2000000</color>
 </resources>

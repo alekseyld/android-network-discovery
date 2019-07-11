@@ -18,6 +18,11 @@
         <item name="actionMenuTextColor">@android:color/white</item>
     </style>
 
+    <style name="menu_labels_style">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
     <style name="Button">
         <item name="android:textSize">14sp</item>
         <!--<item name="android:textColor">#fff</item>-->

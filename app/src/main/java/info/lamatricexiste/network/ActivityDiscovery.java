@@ -36,6 +36,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -76,6 +79,8 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
     private ActionBarDrawerToggle drawerToggle;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+
+    private FloatingActionsMenu floatingActionsMenu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -126,9 +131,11 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
          */
 
         onCreateDrawer();
+
+        setUpFabButton();
     }
 
-    private void  onCreateDrawer() {
+    private void onCreateDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
@@ -161,6 +168,44 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
         drawerToggle.syncState();
     }
 
+    private void setUpFabButton() {
+        floatingActionsMenu = findViewById(R.id.fab_menu);
+
+        FloatingActionButton discoveryButton = getFloatingActionButton(R.drawable.ic_search, R.string.btn_discover);
+
+        discoveryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startDiscovering();
+                floatingActionsMenu.collapse();
+            }
+        });
+
+        FloatingActionButton scanIpButton = getFloatingActionButton(R.drawable.ic_scan_ip, R.string.scan_single_title);
+
+        scanIpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scanSingle(v.getContext(), null);
+                floatingActionsMenu.collapse();
+            }
+        });
+
+        floatingActionsMenu.addButton(discoveryButton);
+        floatingActionsMenu.addButton(scanIpButton);
+    }
+
+    @NonNull
+    private FloatingActionButton getFloatingActionButton(int iconResId, int titleResId) {
+        FloatingActionButton discoveryButton = new FloatingActionButton(this);
+
+        discoveryButton.setColorNormalResId(R.color.fab_color);
+        discoveryButton.setColorPressedResId(R.color.colorPrimaryDark);
+        discoveryButton.setIcon(iconResId);
+        discoveryButton.setTitle(getString(titleResId));
+        return discoveryButton;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -177,9 +222,6 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
         switch (item.getItemId()) {
             case android.R.id.home:
                 toogleDrawer();
-                return true;
-            case R.id.action_scan_ip:
-                scanSingle(this, null);
                 return true;
             case R.id.action_export:
                 export();
@@ -200,9 +242,11 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
 
     protected void setInfo() {
         // Info
-        ((TextView) findViewById(R.id.info_ip)).setText(info_ip_str);
-        ((TextView) findViewById(R.id.info_in)).setText(info_in_str);
-        ((TextView) findViewById(R.id.info_mo)).setText(info_mo_str);
+        View headerView = navigationView.getHeaderView(0);
+
+        ((TextView) headerView.findViewById(R.id.info_ip)).setText(info_ip_str);
+        ((TextView) headerView.findViewById(R.id.info_in)).setText(info_in_str);
+        ((TextView) headerView.findViewById(R.id.info_mo)).setText(info_mo_str);
 
         // Scan button state
         if (mDiscoveryTask != null) {
@@ -251,7 +295,7 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
             Editor edit = prefs.edit();
             edit.putString(Prefs.KEY_IP_START, NetInfo.getIpFromLongUnsigned(network_start));
             edit.putString(Prefs.KEY_IP_END, NetInfo.getIpFromLongUnsigned(network_end));
-            edit.commit();
+            edit.apply();
         }
     }
 
