@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -39,6 +40,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import info.lamatricexiste.network.Network.HostBean;
 import info.lamatricexiste.network.Network.NetInfo;
@@ -92,14 +94,6 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
         btn_discover.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startDiscovering();
-            }
-        });
-
-        // Options
-        Button btn_options = (Button) findViewById(R.id.btn_options);
-        btn_options.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(ctxt, Prefs.class));
             }
         });
 
@@ -174,14 +168,7 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, ActivityDiscovery.MENU_SCAN_SINGLE, 0, R.string.scan_single_title).setIcon(
-                android.R.drawable.ic_menu_mylocation);
-        menu.add(0, ActivityDiscovery.MENU_EXPORT, 0, R.string.preferences_export).setIcon(
-                android.R.drawable.ic_menu_save);
-        menu.add(0, ActivityDiscovery.MENU_OPTIONS, 0, R.string.btn_options).setIcon(
-                android.R.drawable.ic_menu_preferences);
-        menu.add(0, ActivityDiscovery.MENU_HELP, 0, R.string.preferences_help).setIcon(
-                android.R.drawable.ic_menu_help);
+        getMenuInflater().inflate(R.menu.menu_dicovery, menu);
         return true;
     }
 
@@ -191,16 +178,10 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
             case android.R.id.home:
                 toogleDrawer();
                 return true;
-            case ActivityDiscovery.MENU_SCAN_SINGLE:
+            case R.id.action_scan_ip:
                 scanSingle(this, null);
                 return true;
-            case ActivityDiscovery.MENU_OPTIONS:
-                startActivity(new Intent(ctxt, Prefs.class));
-                return true;
-            case ActivityDiscovery.MENU_HELP:
-                startActivity(new Intent(ctxt, Help.class));
-                return true;
-            case ActivityDiscovery.MENU_EXPORT:
+            case R.id.action_export:
                 export();
                 return true;
         }
@@ -225,7 +206,7 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
 
         // Scan button state
         if (mDiscoveryTask != null) {
-            setButton(btn_discover, R.drawable.cancel, false);
+            setButton(btn_discover, R.drawable.ic_cancel, false);
             btn_discover.setText(R.string.btn_discover_cancel);
             btn_discover.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -276,9 +257,9 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
 
     protected void setButtons(boolean disable) {
         if (disable) {
-            setButtonOff(btn_discover, R.drawable.disabled);
+            setButtonOff(btn_discover, R.drawable.ic_cancel);
         } else {
-            setButtonOn(btn_discover, R.drawable.discover);
+            setButtonOn(btn_discover, R.drawable.ic_search);
         }
     }
 
@@ -446,7 +427,7 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
         mDiscoveryTask.setNetwork(network_ip, network_start, network_end);
         mDiscoveryTask.execute();
         btn_discover.setText(R.string.btn_discover_cancel);
-        setButton(btn_discover, R.drawable.cancel, false);
+        setButton(btn_discover, R.drawable.ic_cancel, false);
         btn_discover.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 cancelTasks();
@@ -461,7 +442,7 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
     public void stopDiscovering() {
         Log.e(TAG, "stopDiscovering()");
         mDiscoveryTask = null;
-        setButtonOn(btn_discover, R.drawable.discover);
+        setButtonOn(btn_discover, R.drawable.ic_search);
         btn_discover.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startDiscovering();
@@ -500,9 +481,8 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
                 Intent intent = new Intent(ctxt, ActivityPortscan.class);
                 intent.putExtra(HostBean.EXTRA_HOST, txt.getText().toString());
                 try {
-                    intent.putExtra(HostBean.EXTRA_HOSTNAME, (InetAddress.getByName(txt.getText()
-                            .toString()).getHostName()));
-                } catch (UnknownHostException e) {
+                    intent.putExtra(HostBean.EXTRA_HOSTNAME, (getInetAddressByName(txt.getText().toString()).getHostName()));
+                } catch (Exception e) {
                     intent.putExtra(HostBean.EXTRA_HOSTNAME, txt.getText().toString());
                 }
                 ctxt.startActivity(intent);
@@ -510,6 +490,39 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
         });
         dialogIp.setNegativeButton(R.string.btn_discover_cancel, null);
         dialogIp.show();
+    }
+
+    public static InetAddress getInetAddressByName(String name)
+    {
+        AsyncTask<String, Void, InetAddress> task = new AsyncTask<String, Void, InetAddress>()
+        {
+
+            @Override
+            protected InetAddress doInBackground(String... params)
+            {
+                try
+                {
+                    return InetAddress.getByName(params[0]);
+                }
+                catch (UnknownHostException e)
+                {
+                    return null;
+                }
+            }
+        };
+        try
+        {
+            return task.execute(name).get();
+        }
+        catch (InterruptedException e)
+        {
+            return null;
+        }
+        catch (ExecutionException e)
+        {
+            return null;
+        }
+
     }
 
     private void export() {

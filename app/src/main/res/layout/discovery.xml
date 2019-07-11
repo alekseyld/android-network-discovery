@@ -38,8 +38,10 @@
 
                     <Button
                         android:id="@+id/btn_discover"
-                        style="@style/ButtonTop"
-                        android:drawableLeft="@drawable/discover"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_search"
+                        android:drawableStart="@drawable/ic_search"
                         android:text="@string/btn_discover" />
                 </LinearLayout>
 

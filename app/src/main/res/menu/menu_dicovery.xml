@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:icon="@drawable/ic_save"
         android:id="@+id/action_export"
+        android:icon="@drawable/ic_save"
         android:title="@string/btn_export"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_scan_ip"
+        android:icon="@drawable/ic_scan_ip"
         android:title="@string/scan_single_title"/>
 
 </menu>
