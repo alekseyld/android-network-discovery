@@ -15,6 +15,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -470,14 +472,25 @@ final public class ActivityDiscovery extends ActivityNet implements OnItemClickL
         }
         mDiscoveryTask.setNetwork(network_ip, network_start, network_end);
         mDiscoveryTask.execute();
-        btn_discover.setText(R.string.btn_discover_cancel);
-        setButton(btn_discover, R.drawable.ic_cancel, false);
-        btn_discover.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                cancelTasks();
-            }
-        });
-        makeToast(R.string.discover_start);
+//        btn_discover.setText(R.string.btn_discover_cancel);
+//        setButton(btn_discover, R.drawable.ic_cancel, false);
+//        btn_discover.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                cancelTasks();
+//            }
+//        });
+
+        //makeToast(R.string.discover_start);
+
+        Snackbar.make(btn_discover, R.string.discover_start, Snackbar.LENGTH_INDEFINITE)
+                .setActionTextColor(ContextCompat.getColor(this, android.R.color.white))
+                .setAction(R.string.btn_discover_cancel, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cancelTasks();
+                    }
+                }).show();
+
         setProgressBarVisibility(true);
         setProgressBarIndeterminateVisibility(true);
         initList();
